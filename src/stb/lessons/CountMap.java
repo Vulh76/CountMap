@@ -2,7 +2,7 @@ package stb.lessons;
 
 import java.util.Map;
 
-public interface CountMap<E> extends Iterable<E>{
+public interface CountMap<E> extends Iterable<E> {
     // добавляет элемент в этот контейнер.
     void add(E e);
 

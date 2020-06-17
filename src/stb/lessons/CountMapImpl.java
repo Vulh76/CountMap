@@ -57,7 +57,10 @@ public class CountMapImpl<E> implements CountMap<E> {
     @Override
     public void addAll(CountMap<E> source) {
         for (E e : source) {
-            this.add(e);
+            int count = source.getCount(e);
+            for (int i = 0; i < count; i++) {
+                this.add(e);
+            }
         }
     }
 
@@ -115,10 +118,9 @@ public class CountMapImpl<E> implements CountMap<E> {
         };
     }
 
+    @SuppressWarnings("unchecked")
     private CountMapItem<E> getItem(int index) {
-        @SuppressWarnings("unchecked")
-        CountMapItem<E> item = (CountMapItem<E>) data[index];
-        return item;
+        return (CountMapItem<E>) data[index];
     }
 
     private void rangeCheck(int index) {
@@ -128,8 +130,12 @@ public class CountMapImpl<E> implements CountMap<E> {
 
     private void ensureCapacity(int minCapacity) {
         if (this.capacity < minCapacity) {
+            if(minCapacity == MAX_CAPACITY)
+                throw new OutOfMemoryError();
             int newCapacity = this.capacity * 2;
-            this.data = Arrays.copyOf(data, newCapacity);
+            if(newCapacity < 0)
+                newCapacity = MAX_CAPACITY;
+            this.data = Arrays.copyOf(this.data, newCapacity);
             capacity = newCapacity;
         }
     }
@@ -159,7 +165,7 @@ public class CountMapImpl<E> implements CountMap<E> {
         data[--size] = null;
     }
 
-    private class CountMapItem<T> {
+    private static class CountMapItem<T> {
         private final T value;
         private int count;
 
@@ -184,7 +190,6 @@ public class CountMapImpl<E> implements CountMap<E> {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            @SuppressWarnings("unchecked")
             CountMapItem<?> that = (CountMapItem<?>) o;
             return getValue().equals(that.getValue());
         }
