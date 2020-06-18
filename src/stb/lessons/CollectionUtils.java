@@ -47,7 +47,7 @@ public class CollectionUtils {
         return result;
     }
 
-    public static <C, T extends Comparable<? super C>> List<T> range(List<? extends T> list, C min, C max) {
+    public static <U, T extends Comparable<? super U>> List<T> range(List<? extends T> list, U min, U max) {
         List<T> result = new ArrayList<>(list);
         result.removeIf(i -> i.compareTo(min)<=0 || i.compareTo(max) >=0);
         return result;

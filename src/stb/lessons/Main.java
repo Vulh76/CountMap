@@ -110,6 +110,49 @@ public class Main {
         System.out.println(list2);
         list2 = CollectionUtils.range(list2, 3, 30, Comparator.naturalOrder());
         System.out.println(list2);
+        System.out.println();
 
+        List<Child> childs = Arrays.asList(new Child(1), new Child(3), new Child(5), new Child(7), new Child(9));
+        childs.forEach(System.out::println);
+        System.out.println();
+        List<Parent> parents = CollectionUtils.range(childs, 2, 6);
+        parents.forEach(System.out::println);
+        System.out.println();
+    }
+
+    static class Parent implements Comparable<Integer> {
+        public int i;
+
+        public Parent(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public int compareTo(Integer o) {
+            return new Integer(i).compareTo(o);
+        }
+
+        @Override
+        public String toString() {
+            return "Parent{" +
+                    "i=" + i +
+                    '}';
+        }
+    }
+
+    static class Child extends Parent {
+
+        public Child(int i) {
+            super(i);
+        }
+
+        @Override
+        public String toString() {
+            return "Child{" +
+                    "i=" + i +
+                    '}';
+        }
     }
 }
+
+
